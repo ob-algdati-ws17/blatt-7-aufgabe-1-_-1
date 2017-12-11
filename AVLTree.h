@@ -17,12 +17,18 @@ private:
 
     node *root;
 
+    int getHeight(node *node,int height) const;
+
 public:
+    AVLTree();
+
     friend AVLTree &operator+=(AVLTree &, int value);
 
     friend AVLTree &operator-=(AVLTree &, int value);
 
     bool isEmpty() const;
+
+    int getHeight() const;
 };
 
 
