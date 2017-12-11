@@ -18,3 +18,18 @@ TEST(TestTree, Test_Insert_1) {
     EXPECT_FALSE(tree.isEmpty());
     EXPECT_EQ(1, tree.getHeight());
 }
+
+TEST(TestTree, Test_Insert_same) {
+    AVLTree tree;
+    tree += 1;
+    tree += 1;
+    EXPECT_EQ(1, tree.getHeight());
+}
+
+TEST(TestTree, Test_Insert_231) {
+    AVLTree tree;
+    tree += 2;
+    tree += 3;
+    tree += 1;
+    EXPECT_EQ(2, tree.getHeight());
+}

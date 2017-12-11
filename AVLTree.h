@@ -23,6 +23,8 @@ private:
 
     int getHeight(node *node, int height) const;
 
+    void insert(node *node, int value);
+
 public:
     AVLTree();
 

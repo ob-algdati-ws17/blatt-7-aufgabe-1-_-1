@@ -13,9 +13,12 @@ AVLTree::AVLTree() {
 
 AVLTree &operator+=(AVLTree &tree, int value) {
     if (tree.isEmpty()) {
-        AVLTree::node *tmp = new AVLTree::node(value, 0);
-        tree.root = tmp;
+        tree.root = new AVLTree::node(value, 0);
+    } else {
+        tree.insert(tree.root, value);
     }
+
+    return tree;
 }
 
 AVLTree &operator-=(AVLTree &tree, int value) {
@@ -35,4 +38,31 @@ int AVLTree::getHeight(AVLTree::node *node, int height) const {
         return height;
     }
     return std::max(getHeight(node->left, height + 1), getHeight(node->right, height + 1));
+}
+
+void AVLTree::insert(AVLTree::node *node, int value) {
+    if (value == node->value)return;
+    if (value < node->value) {
+        if (node->left == nullptr) {
+            // bal -1 not possible, because then node->left wouldn't be null
+            // bal 0 => -1
+            // bal 1 => 0
+            node->bal -= 1;
+            node->left = new AVLTree::node(value, 0);
+        } else {
+            insert(node->left, value);
+            return;
+        }
+    } else {
+        if (node->right == nullptr) {
+            // bal 1 not possible, because then node->right wouldn't be null
+            // bal 0 => 1
+            // bal -1 => 0
+            node->bal += 1;
+            node->right = new AVLTree::node(value, 0);
+        } else {
+            insert(node->right, value);
+            return;
+        }
+    }
 }
