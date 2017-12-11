@@ -4,6 +4,7 @@
 
 #include "AVLTree.h"
 #include <iostream>
+#include <list>
 
 AVLTree::AVLTree() {
     root = nullptr;
@@ -84,27 +85,18 @@ void AVLTree::upin(AVLTree::node *node) {
             // case 1.3
             if (node->bal < 0) {
                 // case 1.3.1 rotation right
-                node->parent->left = node->right;
-                if (node->parent->left != nullptr) {
-                    node->parent->left->parent = node->parent;
-                }
-
-                node->right = node->parent;
-                node->parent = node->parent->parent;
-                node->right->parent = node;
-                if (node->parent != nullptr) {
-                    if (node->parent->value < node->value) {
-                        node->parent->right = node;
-                    } else {
-                        node->parent->left = node;
-                    }
-                } else {
-                    root = node;
-                }
                 node->bal = 0;
-                node->right->bal = 0;
+                node->parent->bal = 0;
+                rotateRight(node);
+
             } else {
                 // case 1.3.2 double rotation right
+                rotateLeft(node->right);
+                node = node->parent;
+                rotateRight(node);
+                node->bal = 0;
+                node->left->bal = static_cast<short>(getHeight(node->right, 0) - getHeight(node->left, 0));
+                node->right->bal = static_cast<short>(getHeight(node->right, 0) - getHeight(node->left, 0));
             }
         }
     } else {
@@ -118,30 +110,60 @@ void AVLTree::upin(AVLTree::node *node) {
         } else {
             // case 1.3
             if (node->bal > 0) {
-                // case 1.3.1 rotation left
-                node->parent->right = node->left;
-                if (node->parent->right != nullptr) {
-                    node->parent->right->parent = node->parent;
-                }
-
-                node->left = node->parent;
-                node->parent = node->parent->parent;
-                node->left->parent = node;
-                if (node->parent != nullptr) {
-                    if (node->parent->value < node->value) {
-                        node->parent->right = node;
-                    } else {
-                        node->parent->left = node;
-                    }
-                } else {
-                    root = node;
-                }
                 node->bal = 0;
-                node->left->bal = 0;
+                node->parent->bal = 0;
+                // case 1.3.1 rotation left
+                rotateLeft(node);
             } else {
                 // case 1.3.2 double rotation right
+                rotateRight(node->left);
+                node = node->parent;
+                rotateLeft(node);
+                node->bal = 0;
+                node->left->bal = static_cast<short>(getHeight(node->right, 0) - getHeight(node->left, 0));
+                node->right->bal = static_cast<short>(getHeight(node->right, 0) - getHeight(node->left, 0));
             }
         }
+    }
+}
+
+void AVLTree::rotateLeft(AVLTree::node *node) {
+    node->parent->right = node->left;
+    if (node->parent->right != nullptr) {
+        node->parent->right->parent = node->parent;
+    }
+
+    node->left = node->parent;
+    node->parent = node->parent->parent;
+    node->left->parent = node;
+    if (node->parent != nullptr) {
+        if (node->parent->value < node->value) {
+            node->parent->right = node;
+        } else {
+            node->parent->left = node;
+        }
+    } else {
+        root = node;
+    }
+}
+
+void AVLTree::rotateRight(AVLTree::node *node) {
+    node->parent->left = node->right;
+    if (node->parent->left != nullptr) {
+        node->parent->left->parent = node->parent;
+    }
+
+    node->right = node->parent;
+    node->parent = node->parent->parent;
+    node->right->parent = node;
+    if (node->parent != nullptr) {
+        if (node->parent->value < node->value) {
+            node->parent->right = node;
+        } else {
+            node->parent->left = node;
+        }
+    } else {
+        root = node;
     }
 }
 
@@ -149,14 +171,14 @@ bool AVLTree::checkIntegrity(AVLTree::node *node) const {
     bool tmp = true;
     if (node->left != nullptr) {
         if (node->left->value >= node->value || node->left->parent->value != node->value)return false;
-        tmp = tmp && checkIntegrity(node->left) && (node->right!= nullptr || node->bal == -1);
+        tmp = tmp && checkIntegrity(node->left) && (node->right != nullptr || node->bal == -1);
     }
     if (node->right != nullptr) {
         if (node->right->value <= node->value || node->right->parent->value != node->value)return false;
-        tmp = tmp && checkIntegrity(node->right) && (node->left!= nullptr || node->bal == 1);
+        tmp = tmp && checkIntegrity(node->right) && (node->left != nullptr || node->bal == 1);
     }
-    if(node->left != nullptr && node->right != nullptr){
-        tmp = tmp && node->bal == getHeight(node->right,0) - getHeight(node->left,0);
+    if (node->left != nullptr && node->right != nullptr) {
+        tmp = tmp && node->bal == getHeight(node->right, 0) - getHeight(node->left, 0);
     }
     return tmp;
 }
@@ -164,3 +186,36 @@ bool AVLTree::checkIntegrity(AVLTree::node *node) const {
 bool AVLTree::checkIntegrity() const {
     return isEmpty() ? true : checkIntegrity(root);
 }
+
+int AVLTree::getHeightAt(AVLTree::node *node, int value, int height) {
+    if (node->value == value)
+        return height + 1;
+    else if (value < node->value) {
+        if (node->left == nullptr) return 0;
+        return getHeightAt(node->left, value, height + 1);
+    } else {
+        if (node->right == nullptr) return 0;
+        return getHeightAt(node->right, value, height + 1);
+    }
+}
+
+int AVLTree::getHeightAt(int value) {
+    return isEmpty() ? 0 : getHeightAt(root, value, 0);
+}
+
+short AVLTree::getBalanceAt(AVLTree::node *node, int value) {
+    if (node->value == value)
+        return node->bal;
+    else if (value < node->value) {
+        if (node->left == nullptr) return 0;
+        return getBalanceAt(node->left, value);
+    } else {
+        if (node->right == nullptr) return 0;
+        return getBalanceAt(node->right, value);
+    }
+}
+
+short AVLTree::getBalanceAt(int value) {
+    return static_cast<short>(isEmpty() ? 0 : getBalanceAt(root, value));
+}
+

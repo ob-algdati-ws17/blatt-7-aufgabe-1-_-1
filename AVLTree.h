@@ -5,6 +5,8 @@
 #ifndef TREE_TREE_H
 #define TREE_TREE_H
 
+#include <string>
+
 
 class AVLTree {
 private:
@@ -30,6 +32,10 @@ private:
 
     bool checkIntegrity(node *node) const;
 
+    short getBalanceAt(node *node, int value);
+
+    int getHeightAt(AVLTree::node *node, int value, int height);
+
 public:
     AVLTree();
 
@@ -42,6 +48,14 @@ public:
     int getHeight() const;
 
     bool checkIntegrity() const;
+
+    void rotateRight(node *node);
+
+    void rotateLeft(node *node);
+
+    short getBalanceAt(int value);
+
+    int getHeightAt(int value);
 };
 
 

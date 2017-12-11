@@ -32,7 +32,9 @@ TEST(TestTree, Test_Insert_same) {
 TEST(TestTree, Test_Insert_231) {
     AVLTree tree;
     tree += 2;
+    EXPECT_EQ(0, tree.getBalanceAt(2));
     tree += 3;
+    EXPECT_EQ(1, tree.getBalanceAt(2));
     tree += 1;
     EXPECT_TRUE(tree.checkIntegrity());
     EXPECT_EQ(2, tree.getHeight());
@@ -42,7 +44,14 @@ TEST(TestTree, Test_Insert_rotation_right) {
     AVLTree tree;
     tree += 3;
     tree += 2;
+    EXPECT_EQ(-1, tree.getBalanceAt(3));
     tree += 1;
+    EXPECT_EQ(0, tree.getBalanceAt(1));
+    EXPECT_EQ(0, tree.getBalanceAt(2));
+    EXPECT_EQ(0, tree.getBalanceAt(3));
+    EXPECT_EQ(1, tree.getHeightAt(2));
+    EXPECT_EQ(2, tree.getHeightAt(1));
+    EXPECT_EQ(2, tree.getHeightAt(3));
     EXPECT_TRUE(tree.checkIntegrity());
     EXPECT_EQ(2, tree.getHeight());
 }
@@ -57,15 +66,50 @@ TEST(TestTree, Test_Insert_multiple_rotations) {
     EXPECT_TRUE(tree.checkIntegrity());
     EXPECT_EQ(2, tree.getHeight());
     tree += 6;
+    EXPECT_EQ(0, tree.getBalanceAt(8));
+    EXPECT_EQ(0, tree.getBalanceAt(7));
+    EXPECT_EQ(0, tree.getBalanceAt(6));
+    EXPECT_EQ(1, tree.getHeightAt(7));
+    EXPECT_EQ(2, tree.getHeightAt(6));
+    EXPECT_EQ(2, tree.getHeightAt(8));
     EXPECT_TRUE(tree.checkIntegrity());
     EXPECT_EQ(2, tree.getHeight());
     tree += 5;
+    EXPECT_EQ(0, tree.getBalanceAt(8));
+    EXPECT_EQ(-1, tree.getBalanceAt(7));
+    EXPECT_EQ(-1, tree.getBalanceAt(6));
+    EXPECT_EQ(1, tree.getHeightAt(7));
+    EXPECT_EQ(2, tree.getHeightAt(6));
+    EXPECT_EQ(2, tree.getHeightAt(8));
+    EXPECT_EQ(3, tree.getHeightAt(5));
     EXPECT_TRUE(tree.checkIntegrity());
     EXPECT_EQ(3, tree.getHeight());
     tree += 4;
+    EXPECT_EQ(0, tree.getBalanceAt(8));
+    EXPECT_EQ(-1, tree.getBalanceAt(7));
+    EXPECT_EQ(0, tree.getBalanceAt(6));
+    EXPECT_EQ(0, tree.getBalanceAt(4));
+    EXPECT_EQ(0, tree.getBalanceAt(5));
+    EXPECT_EQ(1, tree.getHeightAt(7));
+    EXPECT_EQ(2, tree.getHeightAt(5));
+    EXPECT_EQ(2, tree.getHeightAt(8));
+    EXPECT_EQ(3, tree.getHeightAt(6));
+    EXPECT_EQ(3, tree.getHeightAt(4));
     EXPECT_TRUE(tree.checkIntegrity());
     EXPECT_EQ(3, tree.getHeight());
     tree += 3;
+    EXPECT_EQ(0, tree.getBalanceAt(7));
+    EXPECT_EQ(-1, tree.getBalanceAt(4));
+    EXPECT_EQ(0, tree.getBalanceAt(5));
+    EXPECT_EQ(0, tree.getBalanceAt(3));
+    EXPECT_EQ(0, tree.getBalanceAt(6));
+    EXPECT_EQ(0, tree.getBalanceAt(8));
+    EXPECT_EQ(1, tree.getHeightAt(5));
+    EXPECT_EQ(2, tree.getHeightAt(4));
+    EXPECT_EQ(2, tree.getHeightAt(7));
+    EXPECT_EQ(3, tree.getHeightAt(3));
+    EXPECT_EQ(3, tree.getHeightAt(6));
+    EXPECT_EQ(3, tree.getHeightAt(8));
     EXPECT_TRUE(tree.checkIntegrity());
     EXPECT_EQ(3, tree.getHeight());
     tree += 2;
@@ -81,6 +125,84 @@ TEST(TestTree, Test_Insert_rotation_left) {
     tree += 1;
     tree += 2;
     tree += 3;
+    EXPECT_EQ(0, tree.getBalanceAt(1));
+    EXPECT_EQ(0, tree.getBalanceAt(2));
+    EXPECT_EQ(0, tree.getBalanceAt(3));
+    EXPECT_EQ(1, tree.getHeightAt(2));
+    EXPECT_EQ(2, tree.getHeightAt(1));
+    EXPECT_EQ(2, tree.getHeightAt(3));
     EXPECT_TRUE(tree.checkIntegrity());
     EXPECT_EQ(2, tree.getHeight());
+}
+
+
+TEST(TestTree, Test_Insert_double_rotation_right) {
+    AVLTree tree;
+    tree += 3;
+    tree += 1;
+    tree += 2;
+    EXPECT_EQ(0, tree.getBalanceAt(1));
+    EXPECT_EQ(0, tree.getBalanceAt(2));
+    EXPECT_EQ(0, tree.getBalanceAt(3));
+    EXPECT_EQ(1, tree.getHeightAt(2));
+    EXPECT_EQ(2, tree.getHeightAt(1));
+    EXPECT_EQ(2, tree.getHeightAt(3));
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_EQ(2, tree.getHeight());
+}
+
+TEST(TestTree, Test_Insert_double_rotation_left) {
+    AVLTree tree;
+    tree += 1;
+    tree += 3;
+    tree += 2;
+    EXPECT_EQ(0, tree.getBalanceAt(1));
+    EXPECT_EQ(0, tree.getBalanceAt(2));
+    EXPECT_EQ(0, tree.getBalanceAt(3));
+    EXPECT_EQ(1, tree.getHeightAt(2));
+    EXPECT_EQ(2, tree.getHeightAt(1));
+    EXPECT_EQ(2, tree.getHeightAt(3));
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_EQ(2, tree.getHeight());
+}
+
+
+TEST(TestTree, Test_Insert_multiple_different_rotations) {
+    AVLTree tree;
+    tree += 7;
+    tree += 9;
+    tree += 8;
+    EXPECT_EQ(0, tree.getBalanceAt(7));
+    EXPECT_EQ(0, tree.getBalanceAt(8));
+    EXPECT_EQ(0, tree.getBalanceAt(9));
+    EXPECT_EQ(1, tree.getHeightAt(8));
+    EXPECT_EQ(2, tree.getHeightAt(9));
+    EXPECT_EQ(2, tree.getHeightAt(7));
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_EQ(2, tree.getHeight());
+    tree += 5;
+    EXPECT_EQ(-1, tree.getBalanceAt(7));
+    EXPECT_EQ(-1, tree.getBalanceAt(8));
+    EXPECT_EQ(0, tree.getBalanceAt(9));
+    EXPECT_EQ(1, tree.getHeightAt(8));
+    EXPECT_EQ(2, tree.getHeightAt(9));
+    EXPECT_EQ(2, tree.getHeightAt(7));
+    tree += 6;
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_EQ(3, tree.getHeight());
+    tree += 4;
+    tree += 3;
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_EQ(3, tree.getHeight());
+    tree += 10;
+    tree += 11;
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_EQ(4, tree.getHeight());
+    tree += 2;
+    tree += 12;
+    tree += 1;
+    tree += 13;
+    tree += 15;
+    tree += 14;
+    EXPECT_TRUE(tree.checkIntegrity());
 }
