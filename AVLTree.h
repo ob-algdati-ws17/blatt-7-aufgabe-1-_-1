@@ -26,7 +26,7 @@ private:
 
     void insert(node *node, int value);
 
-    //void upin
+    void upin(node *node);
 
 public:
     AVLTree();

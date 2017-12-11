@@ -33,3 +33,19 @@ TEST(TestTree, Test_Insert_231) {
     tree += 1;
     EXPECT_EQ(2, tree.getHeight());
 }
+
+TEST(TestTree, Test_Insert_rotation_right) {
+    AVLTree tree;
+    tree += 3;
+    tree += 2;
+    tree += 1;
+    EXPECT_EQ(2, tree.getHeight());
+}
+
+TEST(TestTree, Test_Insert_rotation_left) {
+    AVLTree tree;
+    tree += 1;
+    tree += 2;
+    tree += 3;
+    EXPECT_EQ(2, tree.getHeight());
+}

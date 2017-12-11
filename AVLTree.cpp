@@ -63,4 +63,84 @@ void AVLTree::insert(AVLTree::node *node, int value) {
             return;
         }
     }
+
+    if (node->bal != 0) {
+        upin(node);
+    }
+}
+
+void AVLTree::upin(AVLTree::node *node) {
+    // root
+    if (node->parent == nullptr)return;
+    if (node->parent->left != nullptr && node->parent->left->value == node->value) {
+        if (node->parent->bal > 0) {
+            // case 1.1
+            node->parent->bal = 0;
+        } else if (node->parent->bal == 0) {
+            // case 1.2
+            node->parent->bal = -1;
+            upin(node->parent);
+        } else {
+            // case 1.3
+            if (node->bal < 0) {
+                // case 1.3.1 rotation right
+                node->parent->left = node->right;
+                if (node->parent->left != nullptr) {
+                    node->parent->left->parent = node->parent;
+                }
+
+                node->right = node->parent;
+                node->parent = node->parent->parent;
+                node->right->parent = node;
+                if (node->parent != nullptr) {
+                    if (node->parent->value < node->value) {
+                        node->parent->right = node;
+                    } else {
+                        node->parent->left = node;
+                    }
+                } else {
+                    root = node;
+                }
+                node->bal = 0;
+                node->right->bal = 0;
+            } else {
+                // case 1.3.2 double rotation right
+            }
+        }
+    } else {
+        if (node->parent->bal < 0) {
+            // case 1.1
+            node->parent->bal = 0;
+        } else if (node->parent->bal == 0) {
+            // case 1.2
+            node->parent->bal = +1;
+            upin(node->parent);
+        } else {
+            // case 1.3
+            if (node->bal > 0) {
+                // case 1.3.1 rotation left
+                node->parent->right = node->left;
+                if (node->parent->right != nullptr) {
+                    node->parent->right->parent = node->parent;
+                }
+
+                node->left = node->parent;
+                node->parent = node->parent->parent;
+                node->left->parent = node;
+                if (node->parent != nullptr) {
+                    if (node->parent->value < node->value) {
+                        node->parent->right = node;
+                    } else {
+                        node->parent->left = node;
+                    }
+                } else {
+                    root = node;
+                }
+                node->bal = 0;
+                node->left->bal = 0;
+            } else {
+                // case 1.3.2 double rotation right
+            }
+        }
+    }
 }
