@@ -28,7 +28,7 @@ private:
 
     void upin(node *node);
 
-    bool checkLinks(node *node) const;
+    bool checkIntegrity(node *node) const;
 
 public:
     AVLTree();
@@ -41,7 +41,7 @@ public:
 
     int getHeight() const;
 
-    bool checkLinks() const;
+    bool checkIntegrity() const;
 };
 
 
