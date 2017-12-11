@@ -3,9 +3,7 @@
 //
 
 #include "AVLTree.h"
-#include <stdio.h>
 #include <iostream>
-#include <algorithm>
 
 AVLTree::AVLTree() {
     root = nullptr;
@@ -13,7 +11,7 @@ AVLTree::AVLTree() {
 
 AVLTree &operator+=(AVLTree &tree, int value) {
     if (tree.isEmpty()) {
-        tree.root = new AVLTree::node(value, 0);
+        tree.root = new AVLTree::node(value, nullptr);
     } else {
         tree.insert(tree.root, value);
     }
@@ -48,7 +46,7 @@ void AVLTree::insert(AVLTree::node *node, int value) {
             // bal 0 => -1
             // bal 1 => 0
             node->bal -= 1;
-            node->left = new AVLTree::node(value, 0);
+            node->left = new AVLTree::node(value, node);
         } else {
             insert(node->left, value);
             return;
@@ -59,7 +57,7 @@ void AVLTree::insert(AVLTree::node *node, int value) {
             // bal 0 => 1
             // bal -1 => 0
             node->bal += 1;
-            node->right = new AVLTree::node(value, 0);
+            node->right = new AVLTree::node(value, node);
         } else {
             insert(node->right, value);
             return;

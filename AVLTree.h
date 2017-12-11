@@ -10,13 +10,14 @@ class AVLTree {
 private:
     struct node {
         const int value;
+        node *parent;
         node *left;
         node *right;
         short bal;
 
-        node(const int v, short b) : value(v), bal(b), left(nullptr), right(nullptr) {}
+        node(const int v, node *p) : value(v), bal(0), left(nullptr), right(nullptr), parent(p) {}
 
-        node(const int v, node *l, node *r, short b) : value(v), bal(b), left(l), right(r) {}
+        node(const int v, node *l, node *r, node *p) : value(v), bal(0), left(l), right(r), parent(p) {}
     };
 
     node *root;
@@ -24,6 +25,8 @@ private:
     int getHeight(node *node, int height) const;
 
     void insert(node *node, int value);
+
+    //void upin
 
 public:
     AVLTree();
