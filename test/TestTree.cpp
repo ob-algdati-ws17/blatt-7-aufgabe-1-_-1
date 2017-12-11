@@ -9,6 +9,7 @@ using namespace std;
 TEST(TestTree, Test_Empty) {
     AVLTree tree;
     EXPECT_TRUE(tree.isEmpty());
+    EXPECT_TRUE(tree.checkLinks());
     EXPECT_EQ(0, tree.getHeight());
 }
 
@@ -16,6 +17,7 @@ TEST(TestTree, Test_Insert_1) {
     AVLTree tree;
     tree += 1;
     EXPECT_FALSE(tree.isEmpty());
+    EXPECT_TRUE(tree.checkLinks());
     EXPECT_EQ(1, tree.getHeight());
 }
 
@@ -23,6 +25,7 @@ TEST(TestTree, Test_Insert_same) {
     AVLTree tree;
     tree += 1;
     tree += 1;
+    EXPECT_TRUE(tree.checkLinks());
     EXPECT_EQ(1, tree.getHeight());
 }
 
@@ -31,6 +34,7 @@ TEST(TestTree, Test_Insert_231) {
     tree += 2;
     tree += 3;
     tree += 1;
+    EXPECT_TRUE(tree.checkLinks());
     EXPECT_EQ(2, tree.getHeight());
 }
 
@@ -39,6 +43,7 @@ TEST(TestTree, Test_Insert_rotation_right) {
     tree += 3;
     tree += 2;
     tree += 1;
+    EXPECT_TRUE(tree.checkLinks());
     EXPECT_EQ(2, tree.getHeight());
 }
 
@@ -47,5 +52,6 @@ TEST(TestTree, Test_Insert_rotation_left) {
     tree += 1;
     tree += 2;
     tree += 3;
+    EXPECT_TRUE(tree.checkLinks());
     EXPECT_EQ(2, tree.getHeight());
 }

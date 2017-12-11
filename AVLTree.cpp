@@ -144,3 +144,20 @@ void AVLTree::upin(AVLTree::node *node) {
         }
     }
 }
+
+bool AVLTree::checkLinks(AVLTree::node *node) const {
+    bool tmp = true;
+    if (node->left != nullptr) {
+        if (node->left->value >= node->value || node->left->parent->value != node->value)return false;
+        tmp = tmp && checkLinks(node->left);
+    }
+    if (node->right != nullptr) {
+        if (node->right->value <= node->value || node->right->parent->value != node->value)return false;
+        tmp = tmp && checkLinks(node->right);
+    }
+    return tmp;
+}
+
+bool AVLTree::checkLinks() const {
+    return isEmpty() ? true : checkLinks(root);
+}

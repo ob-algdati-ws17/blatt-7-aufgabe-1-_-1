@@ -28,6 +28,8 @@ private:
 
     void upin(node *node);
 
+    bool checkLinks(node *node) const;
+
 public:
     AVLTree();
 
@@ -38,6 +40,8 @@ public:
     bool isEmpty() const;
 
     int getHeight() const;
+
+    bool checkLinks() const;
 };
 
 
