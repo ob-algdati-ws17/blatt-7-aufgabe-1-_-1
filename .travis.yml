@@ -1,1 +1,11 @@
+dist: trusty
+sudo: required
 language: cpp
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - cmake
+script:
+  - cmake  --target gtest -- -j 2
