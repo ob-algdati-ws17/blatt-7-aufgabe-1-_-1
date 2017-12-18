@@ -11,6 +11,11 @@ TEST(TestTree, Test_Empty) {
     EXPECT_TRUE(tree.isEmpty());
     EXPECT_TRUE(tree.checkIntegrity());
     EXPECT_EQ(0, tree.getHeight());
+    tree += 1;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 1;
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_TRUE(tree.isEmpty());
 }
 
 TEST(TestTree, Test_Insert_1) {
@@ -204,5 +209,111 @@ TEST(TestTree, Test_Insert_multiple_different_rotations) {
     tree += 13;
     tree += 15;
     tree += 14;
+    EXPECT_TRUE(tree.checkIntegrity());
+}
+
+TEST(TestTree, Test_Delete_Double_Rotation) {
+    AVLTree tree;
+    tree += 4;
+    tree += 5;
+    tree += 2;
+    tree += 3;
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_EQ(3, tree.getHeight());
+    tree -= 5;
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_EQ(2, tree.getHeight());
+    EXPECT_EQ(1, tree.getHeightAt(3));
+    tree -= 4;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 2;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 3;
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_TRUE(tree.isEmpty());
+}
+
+TEST(TestTree, Test_Delete_Rotation) {
+    AVLTree tree;
+    tree += 3;
+    tree += 2;
+    tree += 4;
+    tree += 5;
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_EQ(3, tree.getHeight());
+    tree -= 2;
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_EQ(2, tree.getHeight());
+    EXPECT_EQ(1, tree.getHeightAt(4));
+    tree -= 4;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 5;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 3;
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_TRUE(tree.isEmpty());
+}
+
+TEST(TestTree, Test_Delete_Two_Children) {
+    AVLTree tree;
+    tree += 2;
+    tree += 3;
+    tree += 1;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 2;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 1;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 3;
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_TRUE(tree.isEmpty());
+}
+
+TEST(TestTree, Test_Delete_Two_Children2) {
+    AVLTree tree;
+    tree += 2;
+    tree += 4;
+    tree += 1;
+    tree += 3;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 2;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 1;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 3;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 4;
+    EXPECT_TRUE(tree.isEmpty());
+}
+
+TEST(TestTree, Test_Delete_with_one_child) {
+    AVLTree tree;
+    tree += 2;
+    tree += 3;
+    tree += 1;
+    tree += 4;
+    EXPECT_EQ(1, tree.getBalanceAt(3));
+    EXPECT_EQ(3, tree.getHeightAt(4));
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 3;
+    EXPECT_EQ(2, tree.getHeightAt(4));
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 4;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 2;
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_EQ(1, tree.getHeightAt(1));
+    tree -= 1;
+    EXPECT_TRUE(tree.checkIntegrity());
+    EXPECT_TRUE(tree.isEmpty());
+}
+TEST(TestTree, Test_Delete_with_one_child2) {
+    AVLTree tree;
+    tree += 2;
+    tree += 4;
+    tree += 1;
+    tree += 3;
+    EXPECT_TRUE(tree.checkIntegrity());
+    tree -= 3;
     EXPECT_TRUE(tree.checkIntegrity());
 }

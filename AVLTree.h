@@ -11,7 +11,7 @@
 class AVLTree {
 private:
     struct node {
-        const int value;
+        int value;
         node *parent;
         node *left;
         node *right;
@@ -28,7 +28,11 @@ private:
 
     void insert(node *node, int value);
 
+    void remove(node *node, int value);
+
     void upin(node *node);
+
+    void upout(node *node);
 
     bool checkIntegrity(node *node) const;
 
@@ -36,7 +40,10 @@ private:
 
     int getHeightAt(AVLTree::node *node, int value, int height);
 
+    void changeParentPointer(node *node, AVLTree::node *newChild);
+
 public:
+
     AVLTree();
 
     friend AVLTree &operator+=(AVLTree &, int value);
@@ -56,6 +63,7 @@ public:
     short getBalanceAt(int value);
 
     int getHeightAt(int value);
+
 };
 
 
